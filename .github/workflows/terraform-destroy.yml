@@ -3,29 +3,18 @@ name: Terraform Destroy
 on:
   workflow_dispatch: # Permite execução manual do workflow
 
-env:
-    # credentials for deployment to AWS
-    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    # S3 bucket for the terraform state. 
-    BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE }}
-    AWS_REGION: us-east-1
-
 jobs:
   destroy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code 
-        uses: actions/checkout@v4
-
-      - name: Setup Terraform with specified version on the runner
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Init
-        id: init
-        run: terraform init -backend-config "bucket=$BUCKET_TF_STATE"
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Terraform Destroy
-        id: destroy
-        run: terraform destroy -auto-approve
+        env:
+          # Substitua 'TF_VAR_MY_VAR' por suas variáveis reais e adicione outras conforme necessário
+          BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE }}
+        run: |
+          terraform init
+          terraform destroy -auto-approve
