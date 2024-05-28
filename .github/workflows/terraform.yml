@@ -62,10 +62,7 @@ jobs:
           if: github.ref == 'refs/heads/main' && github.event_name == 'push'
           run: terraform apply -auto-approve -input=false -parallelism=1 planfile
         
-        - name: Terraform Destroy
-          id: destroy
-          run: terraform destroy -auto-approve
-
+        
 
 
         
