@@ -11,17 +11,6 @@ on:
         - main
       paths: 
         - terraform/**
-    workflow_dispatch:
-      inputs:
-        confirmDestroy:
-          description: 'Confirm to execute Terraform destroy'
-          required: true
-          default: 'no'
-          type: choice
-          options:
-            - 'yes'
-            - 'no'
-
 
 env:
     # credentials for deployment to AWS
@@ -73,10 +62,6 @@ jobs:
           if: github.ref == 'refs/heads/main' && github.event_name == 'push'
           run: terraform apply -auto-approve -input=false -parallelism=1 planfile
         
-        - name: Terraform Destroy
-          id: destroy
-          if: ${{ github.event.inputs.confirmDestroy == 'yes' }}
-          run: terraform destroy -auto-approve
 
 
 
